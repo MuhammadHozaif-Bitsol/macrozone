@@ -37,6 +37,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "8a21346c-2440-49af-afcb-bd6b28a69b13"
+      }
+    },
+    "owner": "muhammadhozaifs-team"
   }
 }
