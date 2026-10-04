@@ -1,56 +1,66 @@
-# Welcome to your Expo app 👋
+# MacroZone
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A simple macro and calorie tracker built with Expo and React Native. Log meals, see your calorie, protein, carb and fat totals at a glance, and share a daily summary.
 
-## Get started
+## Features
 
-1. Install dependencies
+- **Dashboard**: today's date, macro totals against goals (2,000 cal · 150g protein · 250g carbs · 65g fat), and your 5 most recent meals
+- **Add Meal**: log a meal with name, calories, protein, carbs and fat
+- **All Meals**: full meal list, long-press a meal to delete it, or clear everything at once
+- **Copy & Share**: copy the macro summary to the clipboard or send it through the native share sheet
+- **Haptic feedback** when meals are added or deleted
+- **App-styled dialogs** for confirmations and messages
+- Meals are saved on the device with AsyncStorage, so there's no account or backend
 
-   ```bash
-   npm install
-   ```
+## Tech stack
 
-2. Start the app
+- [Expo](https://expo.dev) SDK 57, React Native 0.86, React 19
+- [Expo Router](https://docs.expo.dev/router/introduction/) with file-based routing and bottom tabs
+- TypeScript
+- `@react-native-async-storage/async-storage`, `expo-haptics`, `expo-clipboard`, `@expo/vector-icons`
+- ESLint with `eslint-config-expo` and `eslint-plugin-sonarjs`
 
-   ```bash
-   npx expo start
-   ```
+## Getting started
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Requirements: Node.js and the [Expo Go](https://expo.dev/go) app on your phone (or an Android emulator / iOS simulator).
 
 ```bash
-npm run reset-project
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Scan the QR code with Expo Go (Android) or the Camera app (iOS).
 
-### Other setup steps
+## Scripts
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+| Command            | What it does                     |
+| ------------------ | -------------------------------- |
+| `npm start`        | Start the Expo dev server        |
+| `npm run android`  | Start and open on Android        |
+| `npm run ios`      | Start and open on iOS            |
+| `npm run web`      | Start and open in the browser    |
+| `npm run lint`     | Lint with Expo + SonarJS rules   |
+| `npx tsc --noEmit` | Type-check the project           |
 
-## Learn more
+## Project structure
 
-To learn more about developing your project with Expo, look at the following resources:
+```
+src/
+├── app/                    # Routes (Expo Router)
+│   ├── _layout.tsx         # Root stack
+│   └── (tabs)/
+│       ├── _layout.tsx     # Bottom tab bar
+│       ├── index.tsx       # Home dashboard
+│       ├── add-meal.tsx    # Add Meal form
+│       └── meals.tsx       # All Meals list
+├── components/             # MacroGrid, MacroCard, MealItem, RecentMeals,
+│                           # ConfirmDialog, CopyButton, ShareButton, HomeHeader
+├── storage/meals.ts        # Meal type + get/add/delete/clear meals
+├── styles/global.ts        # Shared colors and styles
+└── utils/storage.ts        # JSON helpers around AsyncStorage
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Notes
 
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Macro totals currently include every saved meal, not just today's.
+- Haptics need a physical device; emulators usually don't vibrate.
