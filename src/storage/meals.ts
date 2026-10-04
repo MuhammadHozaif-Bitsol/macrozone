@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getData, saveData } from '@/utils/storage';
 
 const MEALS_KEY = 'meals';
@@ -34,4 +35,8 @@ export const deleteMeal = async (id: string): Promise<void> => {
   const meals = await getMeals();
   const filtered = meals.filter((meal) => meal.id !== id);
   await saveData(MEALS_KEY, filtered);
+};
+
+export const clearAllMeals = async (): Promise<void> => {
+  await AsyncStorage.removeItem(MEALS_KEY);
 };

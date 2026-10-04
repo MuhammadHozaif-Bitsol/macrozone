@@ -1,6 +1,8 @@
-import { Alert, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { deleteMeal } from '@/storage/meals';
 import { colors } from '@/styles/global';
+import ConfirmDialog from './ConfirmDialog';
 
 type MealItemProps = Readonly<{
   id: string;
@@ -21,26 +23,31 @@ export default function MealItem({
   fat,
   onDelete,
 }: MealItemProps) {
-  const handleLongPress = () => {
-    Alert.alert('Delete Meal', `Are you sure you want to delete "${name}"?`, [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: async () => {
-          await deleteMeal(id);
-          onDelete();
-        },
-      },
-    ]);
+  const [confirmVisible, setConfirmVisible] = useState(false);
+
+  const handleDelete = async () => {
+    setConfirmVisible(false);
+    await deleteMeal(id);
+    onDelete();
   };
 
   return (
-    <TouchableOpacity style={styles.container} onLongPress={handleLongPress}>
+    <TouchableOpacity
+      style={styles.container}
+      onLongPress={() => setConfirmVisible(true)}
+    >
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.macros}>
         {calories} cal • {protein}g P • {carbs}g C • {fat}g F
       </Text>
+
+      <ConfirmDialog
+        visible={confirmVisible}
+        title='Delete Meal'
+        message={`Are you sure you want to delete "${name}"?`}
+        onConfirm={handleDelete}
+        onCancel={() => setConfirmVisible(false)}
+      />
     </TouchableOpacity>
   );
 }

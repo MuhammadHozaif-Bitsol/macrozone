@@ -1,9 +1,9 @@
+import ConfirmDialog from '@/components/ConfirmDialog';
 import { addMeal } from '@/storage/meals';
 import { colors, globalStyles } from '@/styles/global';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import {
-  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -17,10 +17,11 @@ export default function AddMealScreen() {
   const [protein, setProtein] = useState('');
   const [carbs, setCarbs] = useState('');
   const [fat, setFat] = useState('');
+  const [dialog, setDialog] = useState<'error' | 'success' | null>(null);
 
   const handleAddMeal = async () => {
     if (!name || !calories) {
-      Alert.alert('Error', 'Please enter a meal name and calories.');
+      setDialog('error');
       return;
     }
 
@@ -38,9 +39,15 @@ export default function AddMealScreen() {
     setCarbs('');
     setFat('');
 
-    Alert.alert('Success', 'Meal added successfully!');
+    setDialog('success');
+  };
 
-    router.push('/');
+  const handleDialogClose = () => {
+    const wasSuccess = dialog === 'success';
+    setDialog(null);
+    if (wasSuccess) {
+      router.push('/');
+    }
   };
 
   return (
@@ -94,6 +101,19 @@ export default function AddMealScreen() {
       <TouchableOpacity style={styles.button} onPress={handleAddMeal}>
         <Text style={styles.buttonText}>Add Meal</Text>
       </TouchableOpacity>
+
+      <ConfirmDialog
+        visible={dialog !== null}
+        title={dialog === 'success' ? 'Meal Added' : 'Missing Info'}
+        message={
+          dialog === 'success'
+            ? 'Meal added successfully!'
+            : 'Please enter a meal name and calories.'
+        }
+        confirmText='OK'
+        variant='primary'
+        onConfirm={handleDialogClose}
+      />
     </View>
   );
 }
