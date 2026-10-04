@@ -1,3 +1,4 @@
+import * as Haptics from 'expo-haptics';
 import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { deleteMeal } from '@/storage/meals';
@@ -28,6 +29,7 @@ export default function MealItem({
   const handleDelete = async () => {
     setConfirmVisible(false);
     await deleteMeal(id);
+    await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
     onDelete();
   };
 

@@ -2,6 +2,7 @@ import ConfirmDialog from '@/components/ConfirmDialog';
 import MealItem from '@/components/MealItem';
 import { clearAllMeals, getMeals, Meal } from '@/storage/meals';
 import { colors, globalStyles } from '@/styles/global';
+import * as Haptics from 'expo-haptics';
 import { useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
@@ -11,12 +12,13 @@ export default function AllMealsScreen() {
   const [confirmVisible, setConfirmVisible] = useState(false);
 
   const loadMeals = useCallback(() => {
-    getMeals().then(setMeals);
+    getMeals().then(setMeals).catch(console.error);
   }, []);
 
   const handleClearAll = async () => {
     setConfirmVisible(false);
     await clearAllMeals();
+    await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
     loadMeals();
   };
 

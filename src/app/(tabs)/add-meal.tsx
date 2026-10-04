@@ -1,6 +1,7 @@
 import ConfirmDialog from '@/components/ConfirmDialog';
 import { addMeal } from '@/storage/meals';
 import { colors, globalStyles } from '@/styles/global';
+import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import {
@@ -39,6 +40,7 @@ export default function AddMealScreen() {
     setCarbs('');
     setFat('');
 
+    await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     setDialog('success');
   };
 
